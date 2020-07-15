@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sample">
+	<!-- <select id="selectBoardList" resultType="hashmap" parameterType="hashmap">
+        <![CDATA[
+            SELECT
+                IDX,
+                TITLE,
+                CONTENTS,
+                HIT_CNT,
+                CREA_DTM,
+                CREA_ID
+            FROM
+                TB_BOARD
+            WHERE
+                DEL_GB='N'
+            ORDER BY IDX DESC
+        ]]>
+	</select> -->
+	<!-- 페이징 기법 List -->
+	<select id="selectBoardList" resultType="hashmap" parameterType="hashmap">
+		<![CDATA[
+			SELECT
+           (
+               SELECT
+                   COUNT(*) 
+               FROM 
+                   TB_BOARD
+               WHERE 
+                   DEL_GB = 'N'
+           ) AS TOTAL_COUNT ,
+           IDX,
+           TITLE,
+           HIT_CNT,
+           CREA_DTM
+       FROM
+           TB_BOARD
+       WHERE
+           DEL_GB= 'N'
+       ORDER BY 
+           IDX DESC
+       LIMIT #{START} , #{END}
+		]]>
+	</select><!-- LIMIT에 #{START}는 몆번째부터 시작할 지를 나타내고 #{END}는 몆개의 칼럼을 가져올지 정함 TOTAL_COUNT는 게시물 총갯수 구하기 -->
+	
+	<!-- userGeneratedKeys는 자동 생성키를 사용하겟냐로 여기서 만들어진 IDX,즉 게시물 번호를 말한다. keyProperty가 그 해당 자동 생성키의 이름을 설정하는 것으로 이를 통해 FileUtils에서 Board_IDX 값을 받아 왔다. -->
+	<insert id="writeBoard" parameterType="hashmap" useGeneratedKeys="true" keyProperty="IDX">
+		<![CDATA[
+			INSERT INTO 
+				TB_BOARD(
+				TITLE,
+				CONTENTS,
+				HIT_CNT,
+				DEL_GB,
+				CREA_ID)
+				VALUES(
+				#{TITLE},
+				#{CONTENTS},
+				0,
+				'N',
+				'Admin')
+		]]>
+	</insert>
+	<select id="selectBoard" parameterType="hashmap" resultType="hashmap">	
+		<![CDATA[
+			SELECT idx,title,contents,hit_cnt,crea_id,crea_dtm,del_gb
+			FROM tb_board
+			WHERE IDX=#{IDX}
+		]]>
+	</select>
+
+	<update id="updateHitCnt">
+		<![CDATA[
+			UPDATE TB_BOARD
+			SET HIT_CNT = HIT_CNT+1
+			WHERE IDX=#{IDX}
+		]]>
+	</update>
+	<update id="modifyBoard" parameterType="hashmap">
+		<![CDATA[
+			UPDATE TB_BOARD
+			SET	TITLE=#{TITLE},
+				CONTENTS=#{CONTENTS}
+			WHERE IDX=#{IDX};
+		]]>
+	</update>
+	<update id="deleteBoard" parameterType="hashmap">
+		<![CDATA[
+			UPDATE tb_board
+			set
+				del_gb='Y'
+			where
+				idx=#{IDX}
+		]]>
+	</update>
+	<select id="selectBoardDeleteList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+	            SELECT
+	                IDX,
+	                TITLE,
+	                CONTENTS,
+	                HIT_CNT,
+	                CREA_DTM,
+	                CREA_ID
+	            FROM
+	                TB_BOARD
+	            WHERE
+	                DEL_GB='Y'
+	            ORDER BY IDX DESC
+	        ]]>
+	</select>
+	<update id="restoreBoard" parameterType="hashmap">
+		<![CDATA[
+			update tb_board
+			set
+				del_gb='N'
+			where
+				idx=#{IDX}
+		]]>
+	</update>
+	<insert id="insertFile" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO tb_file
+			(
+				board_idx,
+				original_file_name,
+				stored_file_name,
+				file_size,
+				crea_id
+			)
+			values
+			(
+				#{BOARD_IDX},
+				#{ORIGINAL_FILE_NAME},
+				#{STORED_FILE_NAME},
+				#{FILE_SIZE},
+				'ADMIN'
+			)
+		]]>
+	</insert>
+	<select id="selectFileList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				idx,
+				original_file_name,
+				round(file_size/1024) as file_size
+			from
+				tb_file
+			where
+				board_idx=#{IDX} and del_gb='N'
+		]]>
+	</select>
+	<update id="deleteFile" parameterType="hashmap">
+		<![CDATA[
+			UPDATE tb_file
+			set del_gb = 'Y'
+			where board_idx = #{IDX}
+		]]>
+	</update>
+	<update id="updateFile" parameterType="hashmap">
+		<![CDATA[
+			UPDATE tb_file
+			SET del_gb = 'N'
+			WHERE idx = #{FILE_IDX}
+		]]>
+	</update>
+</mapper>
