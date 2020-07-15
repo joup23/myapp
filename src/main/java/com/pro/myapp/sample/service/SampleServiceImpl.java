@@ -30,13 +30,14 @@ public class SampleServiceImpl implements SampleService {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("map", sampleDAO.selectBoard(map));
 		resultMap.put("list", sampleDAO.selectFileList(map));
+		resultMap.put("comment", sampleDAO.selectCommentList(map));
 		return resultMap;
 	}
 
-	/*@Override
-	public List<Map<String, Object>> selectBoardList(Map<String, Object> map) throws Exception { 
-		sampleDAO.selectBoardList(map);
-	}*/
+	/*
+	 * @Override public List<Map<String, Object>> selectBoardList(Map<String,
+	 * Object> map) throws Exception { sampleDAO.selectBoardList(map); }
+	 */
 
 	@Override
 	public Map<String, Object> selectBoardList(Map<String, Object> map) throws Exception {
@@ -101,6 +102,38 @@ public class SampleServiceImpl implements SampleService {
 	@Override
 	public void deleteBoard(Map<String, Object> map) throws Exception {
 		sampleDAO.deleteBoard(map);
+	}
+
+	@Override
+	public void writeComment(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		sampleDAO.insertComment(map);
+	}
+
+	@Override
+	public void deleteComment(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		sampleDAO.deleteComment(map);
+	}
+
+	@Override
+	public void modifyComment(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		sampleDAO.modifyComment(map);
+	}
+
+	@Override
+	public String joinUser(Map<String, Object> map) throws Exception {
+		if (!(sampleDAO.selectUserID(map) == null)) {
+			return "아이디";
+		} else if (!(sampleDAO.selectUserEmail(map) == null)) {
+			return "이메일";
+		} else if (!(sampleDAO.selectUserNickname(map) == null)) {
+			return "닉네임";
+		} else {
+			sampleDAO.insertUser(map);
+			return "완료";
+		}
 	}
 
 }

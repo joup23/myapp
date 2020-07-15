@@ -69,4 +69,43 @@ public class SampleDAO  extends AbstractDAO{
 	public void updateFile(Map<String, Object> map) {
 		update("sample.updateFile", map);
 	}
+
+	public void insertComment(Map<String, Object> map) throws Exception{
+		// TODO Auto-generated method stub
+		insert("sample.insertComment", map);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectCommentList(Map<String, Object> map)throws Exception{
+		return (List<Map<String, Object>>)selectList("sample.selectCommentList",map);
+	}
+	
+	public void deleteComment(Map<String, Object> map)throws Exception {
+		// TODO Auto-generated method stub
+		update("sample.deleteComment", map);
+	}
+
+	
+	public void modifyComment(Map<String, Object> map)throws Exception{
+		// TODO Auto-generated method stub
+		update("sample.updateComment", map);
+	}
+	public void insertUser(Map<String, Object> map) throws Exception{
+		insert("sample.insertUser", map);
+	}
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> selectUserID(Map<String, Object> map) throws Exception{
+		// TODO Auto-generated method stub
+		return (Map<String, Object>)selectOne("sample.selectUserID",map); //Map인 이유:로그인을 구현하면서 유저에 대한 정보를 가져와 세션에 저장하기 위함.
+	}
+
+	public String selectUserEmail(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return (String)selectOne("sample.selectUserEmail",map);
+	}
+
+	public String selectUserNickname(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return (String)selectOne("sample.selectUserNickname", map);
+	}
 }

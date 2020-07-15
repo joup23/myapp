@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.swing.tree.ExpandVetoException;
 
 import org.apache.log4j.Logger;
+import org.apache.maven.model.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -89,6 +90,7 @@ public class SampleController {
 
 		mv.addObject("map", map.get("map"));
 		mv.addObject("list",map.get("list"));
+		mv.addObject("comment",map.get("comment"));
 		return mv;
 	}
 
@@ -162,4 +164,52 @@ public class SampleController {
 		return mv;
 	}
 
+	@RequestMapping(value="/sample/writeComment.do")
+	public ModelAndView writeComment(CommandMap commandMap)throws Exception{
+		ModelAndView mv = new ModelAndView("redirect:/sample/openBoardDetail.do");
+		sampleService.writeComment(commandMap.getMap());
+		
+		mv.addObject("IDX",commandMap.get("IDX"));
+		
+		return mv;
+	}
+	
+	@RequestMapping(value="/sample/deleteComment.do")
+	public ModelAndView deleteComment(CommandMap commandMap) throws Exception{
+		ModelAndView mv = new ModelAndView("redirect:/sample/openBoardDetail.do");
+		sampleService.deleteComment(commandMap.getMap());
+		
+		mv.addObject("IDX",commandMap.get("IDX"));
+		return mv;
+	}
+	@RequestMapping(value="/sample/updateComment.do")
+	public ModelAndView modifyComment(CommandMap commandMap)throws Exception{
+		ModelAndView mv = new ModelAndView("redirect:/sample/openBoardDetail.do");
+		sampleService.modifyComment(commandMap.getMap());
+		
+		mv.addObject("IDX",commandMap.get("IDX"));
+		
+		return mv;
+	}
+	
+	@RequestMapping(value="/sample/openUser.do")
+	public ModelAndView openUserJoin(CommandMap commandMap)throws Exception{
+		ModelAndView mv = new ModelAndView("user/userJoin");
+		
+		mv.addObject("error", commandMap.get("error"));
+		
+		return mv;
+	}
+	@RequestMapping(value="/sample/joinUser.do")
+	public ModelAndView joinUser(CommandMap commandMap)throws Exception{
+		String error = sampleService.joinUser(commandMap.getMap());
+		ModelAndView mv = null;
+		if(error.equals("완료")) {
+			mv = new ModelAndView("redirect:/sample/openBoardList.do");
+		}else {
+			mv = new ModelAndView("redirect:/sample/openUserJoin.do");
+			mv.addObject("error",error);
+		}
+		return mv;
+	}
 }
