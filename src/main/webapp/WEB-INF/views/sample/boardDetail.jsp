@@ -73,25 +73,31 @@
                             <td>
                                 <input type="hidden" value="${com.IDX }" id="com_IDX">
                                 <div id="com_Div"><input type="hidden" value ="${com.CONTENTS}" id="com_CON">${com.CONTENTS }</div>
-                                <div align="right">
-                                    <a href="#this" name="com_Del" class="btn">삭제</a>
-                                    <a href="#this" name="com_Mod" class="btn">수정</a>
-                                </div>                            
+                                <c:if test="${com.CREA_ID==userInfo.uid }">
+                                    <div align="right">
+                                        <a href="#this" name="com_Del" class="btn">삭제</a>
+                                        <a href="#this" name="com_Mod" class="btn">수정</a>
+                                    </div>                            
+                                </c:if>                           
                             </td>
                         </tr>
                     </c:forEach>
                 </c:if>
-                <tr>
-                    <td colspan="2">
-                        <div>
-                            Admin
+                <c:if test="${! empty userInfo }">
+                    <tr>
+                        <td colspan="2">
+                            <div>
+                                ${userInfo.uid}
+                                <input type="hidden" name="CREA_ID" value="${userInfo.uid }"/>
+                                 
  
  
-                            <textarea  rows="5" cols="130" name="COM_CONTENTS" ></textarea>
-                            <p align="right" ><a href="#this" id="com_write" class="btn">등록</a></p>
-                        </div>
-                    </td>
-                </tr>
+                                <textarea  rows="5" cols="130" name="COM_CONTENTS" ></textarea>
+                                <p align="right" ><a href="#this" id="com_write" class="btn">등록</a></p>
+                            </div>
+                        </td>
+                    </tr>
+                </c:if>
             </tbody>
         </table>
     </form>

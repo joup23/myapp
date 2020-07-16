@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.pro.myapp.board.common.common.CommandMap;
+import com.pro.myapp.sample.spring.UserInfo;
 
 public interface SampleService {
 
@@ -32,5 +33,7 @@ public interface SampleService {
 	void modifyComment(Map<String, Object> map)throws Exception;
 
 	String joinUser(Map<String, Object> map)throws Exception;
+
+	UserInfo loginUser(Map<String, Object> map)throws Exception;
 	
 }

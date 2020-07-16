@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.pro.myapp.board.common.util.FileUtils;
 import com.pro.myapp.sample.dao.SampleDAO;
+import com.pro.myapp.sample.spring.UserInfo;
 
 @Service("sampleService") // Controller에서 사용할기 위한 선언
 public class SampleServiceImpl implements SampleService {
@@ -133,6 +134,22 @@ public class SampleServiceImpl implements SampleService {
 		} else {
 			sampleDAO.insertUser(map);
 			return "완료";
+		}
+	}
+	
+	@Override
+	public UserInfo loginUser(Map<String, Object> map) throws Exception {
+		Map<String, Object> tempMap = sampleDAO.selectUserID(map);
+		UserInfo userInfo = null;
+		if(tempMap.get("UPW").equals(map.get("UPW").toString())) {
+			userInfo = new UserInfo(tempMap.get("UID").toString(),
+					Integer.parseInt(tempMap.get("IDX").toString()),
+					tempMap.get("UNICK").toString());
+			userInfo.setError(false);
+			return userInfo;
+		}else {
+			userInfo = new UserInfo(true);
+			return userInfo;
 		}
 	}
 

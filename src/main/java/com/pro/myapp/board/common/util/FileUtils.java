@@ -36,7 +36,8 @@ public class FileUtils {
 		Map<String, Object> fileMap = null;
 
 		String board_IDX = (String) map.get("IDX").toString(); // ServiceImpl 에서 전달해준 map에서 신규 생성되는 게시글 번호를 받아오도록
-
+		String crea_Id = map.get("CREA_ID").toString();
+		
 		File file = new File(filePath);
 		if (file.exists() == false) {
 			file.mkdirs();

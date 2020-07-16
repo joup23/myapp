@@ -8,6 +8,18 @@
 </head>
 <body>
 	<h2>게시판 목록</h2>
+	<div align="right">
+		<c:choose>
+			<c:when test="${empty userInfo }">
+				<a href="#this" class="btn" id="login">로그인</a>
+				<a href="#this" class="btn" id="join">회원가입</a>
+			</c:when>
+			<c:otherwise>
+				<a href="#this" class="btn" id="logout">로그아웃</a>
+			</c:otherwise>
+		</c:choose>
+	</div>
+
 	<table style="border: 1px solid #ccc">
 		<colgroup>
 			<col width="10%" />
@@ -47,9 +59,10 @@
 	</table>
 
 	<c:if test="${not empty paginationInfo}">
-         <ui:pagination paginationInfo = "${paginationInfo}" type="text" jsFunction="fn_search"/>
-    </c:if>
-    <input type="hidden" id="currentPageNo" name="currentPageNo"/>
+		<ui:pagination paginationInfo="${paginationInfo}" type="text"
+			jsFunction="fn_search" />
+	</c:if>
+	<input type="hidden" id="currentPageNo" name="currentPageNo" />
 
 	<a href="#this" id="write" class="btn">글쓰기</a>
 
@@ -64,6 +77,18 @@
 				e.preventDefault();
 				fn_openBoardDetail($(this));
 			})
+			$("#login").on("click", function(e) {
+				e.preventDefault();
+				fn_openUserLogin();
+			})
+			$("#join").on("click", function(e) {
+				e.preventDefault();
+				fn_openUserJoin();
+			})
+			$("#logout").on("click", function(e) {
+				e.preventDefault();
+				fn_logoutUser();
+			})
 		})
 
 		function fn_openBoardWrite() {
@@ -77,12 +102,28 @@
 			comSubmit.setUrl("<c:url value='/sample/openBoardDetail.do'/>");
 			comSubmit.submit();
 		}
-		function fn_search(pageNo){
-            var comSubmit = new ComSubmit();
-            comSubmit.setUrl("<c:url value='/sample/openBoardList.do' />");
-            comSubmit.addParam("currentPageNo", pageNo);
-            comSubmit.submit();
-        }
+		function fn_search(pageNo) {
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/sample/openBoardList.do' />");
+			comSubmit.addParam("currentPageNo", pageNo);
+			comSubmit.submit();
+		}
+
+		function fn_openUserLogin() {
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/sample/openUserLogin.do'/>");
+			comSubmit.submit();
+		}
+		function fn_openUserJoin() {
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/sample/openUserJoin.do'/>");
+			comSubmit.submit();
+		}
+		function fn_logoutUser() {
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/sample/logoutUser.do'/>");
+			comSubmit.submit();
+		}
 	</script>
 
 </body>

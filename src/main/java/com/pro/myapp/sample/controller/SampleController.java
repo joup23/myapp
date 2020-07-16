@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.swing.tree.ExpandVetoException;
 
 import org.apache.log4j.Logger;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.pro.myapp.board.common.common.CommandMap;
 import com.pro.myapp.sample.service.SampleService;
+import com.pro.myapp.sample.spring.UserInfo;
 
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
@@ -210,6 +212,37 @@ public class SampleController {
 			mv = new ModelAndView("redirect:/sample/openUserJoin.do");
 			mv.addObject("error",error);
 		}
+		return mv;
+	}
+	
+	@RequestMapping(value="/sample/openUserLogin.do")
+	public ModelAndView openUserLogin(CommandMap commandMap)throws Exception{
+		ModelAndView mv = new ModelAndView("user/userLogin");
+		
+		mv.addObject("error", commandMap.get("error"));
+		
+		return mv;
+	}
+	
+	@RequestMapping(value="/sample/loginUser.do")
+	public ModelAndView loginUser(CommandMap commandMap, HttpSession session)throws Exception{
+		UserInfo userInfo = sampleService.loginUser(commandMap.getMap());
+		ModelAndView mv = null;
+		if(!userInfo.isError()) {
+			mv = new ModelAndView("redirect:/sample/openBoardList.do");
+			session.setAttribute("userInfo", userInfo);
+		}else {
+			mv = new ModelAndView("redirect:/sample/openUserLogin.do");
+			mv.addObject("error",userInfo.isError());
+		}
+		return mv;
+	}
+	
+	@RequestMapping(value="/sample/logoutUser.do")
+	public ModelAndView logoutUser(CommandMap commandMap, HttpSession session)throws Exception{
+		ModelAndView mv = new ModelAndView("redirect:/sample/openBoardList.do");
+		session.invalidate();
+		
 		return mv;
 	}
 }

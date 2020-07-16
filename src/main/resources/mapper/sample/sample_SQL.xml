@@ -59,7 +59,8 @@
 				#{CONTENTS},
 				0,
 				'N',
-				'Admin')
+				#{CREA_ID}
+				)
 		]]>
 	</insert>
 	<select id="selectBoard" parameterType="hashmap" resultType="hashmap">	
@@ -135,7 +136,7 @@
 				#{ORIGINAL_FILE_NAME},
 				#{STORED_FILE_NAME},
 				#{FILE_SIZE},
-				'ADMIN'
+				#{CREA_ID}
 			)
 		]]>
 	</insert>
@@ -175,7 +176,7 @@
 				CONTENTS
 			) VALUES(
 				#{IDX},
-				'ADMIN',
+				#{CREA_ID},
 				
 				#{COM_CONTENTS}
 				)
