@@ -25,4 +25,12 @@ public interface SampleService {
 
 	void restoreBoard(Map<String, Object> map)throws Exception;
 
+	void writeComment(Map<String, Object> map)throws Exception;
+
+	void deleteComment(Map<String, Object> map)throws Exception;
+
+	void modifyComment(Map<String, Object> map)throws Exception;
+
+	String joinUser(Map<String, Object> map)throws Exception;
+	
 }

@@ -165,4 +165,107 @@
 			WHERE idx = #{FILE_IDX}
 		]]>
 	</update>
+	<insert id="insertComment" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO 
+			TB_COMMENT(
+				BOARD_IDX,
+				CREA_ID,
+				
+				CONTENTS
+			) VALUES(
+				#{IDX},
+				'ADMIN',
+				
+				#{COM_CONTENTS}
+				)
+		]]>
+	</insert>
+	
+	<select id="selectCommentList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				IDX,
+				CREA_ID,
+				CONTENTS,
+				CREA_DTM
+			FROM
+				TB_COMMENT
+			WHERE
+				BOARD_IDX=#{IDX}
+				AND
+				DEL_GB='N'
+		]]>
+	</select>
+	<update id="deleteComment" parameterType="hashmap">
+		<![CDATA[
+			UPDATE
+				TB_COMMENT
+			SET
+				DEL_GB='Y'
+			WHERE
+				IDX=#{COM_IDX}
+		]]>
+	</update>
+	<update id="updateComment" parameterType="hashmap">
+		<![CDATA[
+			UPDATE
+				TB_COMMENT
+			SET
+				CONTENTS=#{COM_CONTENTS_UPD}
+			WHERE
+				IDX=#{COM_IDX}
+		]]>
+	</update>
+	<insert id="insertUser" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO
+				TB_USER(
+					UID,
+					UPW,
+					UNAME,
+					UNICK,
+					EMAIL)
+				VALUES(
+					#{UID},
+					#{UPW},
+					#{UNAME},
+					#{UNICK},
+					#{EMAIL})
+		]]>
+	</insert>
+	
+	<select id="selectUserID" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT
+				IDX,
+				UID,
+				UPW,
+				UNICK
+			FROM
+				TB_USER
+			WHERE
+				UID=#{UID}
+		]]>
+	</select>
+	<select id="selectUserEmail" parameterType="hashmap" resultType="java.lang.String">
+		<![CDATA[
+			SELECT
+				EMAIL
+			FROM
+				TB_USER
+			WHERE
+				EMAIL=#{EMAIL}
+		]]>
+	</select>
+	<select id="selectUserNickname" parameterType="hashmap" resultType="java.lang.String">
+		<![CDATA[
+			SELECT
+				UNICK
+			FROM
+				TB_USER
+			WHERE
+				UNICK=#{UNICK}
+		]]>
+	</select>
 </mapper>
